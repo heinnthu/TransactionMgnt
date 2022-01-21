@@ -10,7 +10,7 @@ using TransactionMgnt;
 
 namespace GetTransactionController
 {
-    [Route("odata/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class GetTransactionController : ControllerBase
     {
