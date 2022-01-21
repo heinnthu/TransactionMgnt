@@ -21,7 +21,7 @@ namespace TransactionMgnt.Pages
 
         public string Result { get; private set; }
         private readonly long _fileSizeLimit;
-        private readonly string[] _permittedExtensions = { ".csv", ".xml",".pdf" };
+        private readonly string[] _permittedExtensions = { ".csv", ".xml"};
         private readonly string _targetFilePath;
 
         public UploadModel(ILogger<UploadModel> logger)
