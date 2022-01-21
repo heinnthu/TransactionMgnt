@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace TransactionMgnt
 {
-
     public class Transaction
     {
         [Key]
@@ -18,11 +17,7 @@ namespace TransactionMgnt
         public string CurrencyCode { get; set; }
         public DateTime TransactionDate { get; set; }
         [StringLength(10)]
-        public string Status { get; set; }
-        [StringLength(50)]
-        public string CreatedIP { get; set; }
-        [StringLength(50)]
-        public string CreatedUser { get; set; }
+        public string Status { get; set; }    
         public DateTime CreatedDateTime { get; set; }
 
     }

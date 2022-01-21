@@ -19,10 +19,7 @@ namespace TransactionMgnt.Pages
 
         public void OnGet()
         {
-            using (var db = new DatabaseContext())
-            {
-                var blogs = db.Transaction.ToList();
-            }
+          
         }
     }
 }
