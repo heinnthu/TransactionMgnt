@@ -3,11 +3,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.OData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
+
 
 namespace TransactionMgnt
 {
@@ -25,8 +29,13 @@ namespace TransactionMgnt
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            //services.AddDbContext<DatabaseContext>(options =>
-            //options.UseNpgsql(Configuration.GetConnectionString("Default")));
+            services.AddControllers(mvcOptions =>
+              mvcOptions.EnableEndpointRouting = false);
+            services.AddRouting();
+        
+            services.AddControllers().AddOData(opt => opt.AddRouteComponents("odata", GetEdmModel()));
+            
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,8 +58,19 @@ namespace TransactionMgnt
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                endpoints.MapRazorPages();               
+                endpoints.MapControllers();
+
             });
+
+        }
+
+        IEdmModel GetEdmModel()
+        {
+            var odataBuilder = new ODataConventionModelBuilder();
+            odataBuilder.EntitySet<Transaction>("GetTransaction").EntityType.Select().Filter().Expand().OrderBy().Count().Page(); ;
+
+            return odataBuilder.GetEdmModel();
         }
     }
 }

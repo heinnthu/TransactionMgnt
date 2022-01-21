@@ -81,40 +81,41 @@ namespace TransactionMgnt.Pages
                     await fileStream.WriteAsync(formFileContent);
 
                 }
-                //CsvHelper.Configuration.CsvConfiguration csvConfiguration = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.CurrentCulture);
-                //csvConfiguration.Delimiter = ",";
-                //csvConfiguration.HasHeaderRecord = false;
-                //csvConfiguration.BadDataFound = null;              
-                //using (var reader = new StreamReader(filePath))
-                //using (var csv = new CsvReader(reader, csvConfiguration))
-                //{
-                //    try
-                //    {                        
-                //        var records = csv.GetRecords<TransactionDto>();
-                //        var result = records.ToList();
 
-                //        foreach(TransactionDto transactionDto in result)
-                //        {
-                //            using (var db = new DatabaseContext())
-                //            {
-                //                Transaction transaction =new Transaction();
-                //                transaction.Id = Guid.NewGuid();
-                //                transaction.TransactionId = transactionDto.TransactionId;
-                //                transaction.Amount = decimal.Parse(transactionDto.Amount);
-                //                transaction.CurrencyCode = transactionDto.CurrencyCode;
-                //                transaction.TransactionDate = DateTime.Parse(transactionDto.TransactionDate);
-                //                transaction.CreatedDateTime = DateTime.Now;
-                //                db.Transaction.Add(transaction);
-                //                db.SaveChanges();
-                //            }
-                //        }
-                     
-                //    }
-                //    catch (BadDataException ex)
-                //    {
-                //        _logger.LogError(ex.ToString());
-                //    }
-                //}
+                CsvHelper.Configuration.CsvConfiguration csvConfiguration = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.CurrentCulture);
+                csvConfiguration.Delimiter = ",";
+                csvConfiguration.HasHeaderRecord = false;
+                csvConfiguration.BadDataFound = null;
+                using (var reader = new StreamReader(filePath))
+                using (var csv = new CsvReader(reader, csvConfiguration))
+                {
+                    try
+                    {
+                        var records = csv.GetRecords<TransactionDto>();
+                        var result = records.ToList();
+
+                        foreach (TransactionDto transactionDto in result)
+                        {
+                            using (var db = new DatabaseContext())
+                            {
+                                Transaction transaction = new Transaction();
+                                transaction.Id = Guid.NewGuid();
+                                transaction.TransactionId = transactionDto.TransactionId;
+                                transaction.Amount = decimal.Parse(transactionDto.Amount);
+                                transaction.CurrencyCode = transactionDto.CurrencyCode;
+                                transaction.TransactionDate = DateTime.Parse(transactionDto.TransactionDate);
+                                transaction.CreatedDateTime = DateTime.Now;
+                                db.Transaction.Add(transaction);
+                                db.SaveChanges();
+                            }
+                        }
+
+                    }
+                    catch (BadDataException ex)
+                    {
+                        _logger.LogError(ex.ToString());
+                    }
+                }
             }
         
             ViewData["Success"] = "File was uploaded successfully";
